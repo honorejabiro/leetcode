@@ -1,36 +1,20 @@
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
 
+        # Optimized Knapsack
         n = len(nums)
-        total = sum(nums)
 
+        total = sum(nums)
         if total % 2 == 1:
             return False
 
         half = total // 2
-        memo = {}
+        dp = [False] * (half + 1)
+        dp[0] = True
 
-        
-        def backtrack(i, remaining_sum):
+        for i in range(n):
+            for curr_sum in range(half, nums[i] - 1, -1):
+                dp[curr_sum] = dp[curr_sum] or dp[curr_sum - nums[i]]
 
-            if (i, remaining_sum) in memo:
-                return memo[(i, remaining_sum)]
-
-            if remaining_sum == 0:
-                return True
-
-            if i == n:
-                return False
-
-            memo[(i, remaining_sum)] = False
-            if backtrack(i + 1, remaining_sum - nums[i]):
-                memo[(i, remaining_sum)] = True
-                return memo[(i, remaining_sum)]
-            elif backtrack(i + 1, remaining_sum):
-                memo[(i, remaining_sum)] = True
-                return memo[(i, remaining_sum)]
-            
-            return memo[(i, remaining_sum)]
-
-        return backtrack(0, half)
+        return dp[-1]
 
