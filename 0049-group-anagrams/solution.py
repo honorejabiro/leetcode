@@ -1,24 +1,19 @@
-from collections import defaultdict
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        # Create a hashmap where key is the tuple of asci value of the word and value is a list of group anagrams
-        # Iterate over the list
-        # Create a key using the array oof 26 letters where each index represents count of a letter
-        # If the key is in hashmap add the string to the array 
+        from collections import defaultdict
         hashmap = defaultdict(list)
-        def get_key(string):
-            chars = [0] * 26
-            for i in string:
-                num = ord(i) - ord("a")
-                chars[num] += 1
-
-            return tuple(chars)
+        res = []
 
         for i in strs:
-            key = get_key(i)
+            key = [0] * 26
+            for j in i:
+                n = ord(j) - ord("a")
+                key[n] += 1
+            
+            key = tuple(key)
             hashmap[key].append(i)
-        res = []
-        for i in hashmap:
-            res.append(hashmap[i])
-        return res
 
+        for i in hashmap.values():
+            res.append(i)
+
+        return res
