@@ -1,20 +1,20 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        prefix = [1] * len(nums)
-        suffix = [1] * len(nums)
-        
-        # Iterate from the first element and then multiply from the front
-        pre = 1
+        prefix = nums[:]
+        num = 1
         for i in range(1, len(nums)):
-            pre *= nums[i-1]
-            prefix[i] = pre
-            
-        su = 1
-        for i in range(len(nums)-2, -1, -1):
-            su *= nums[i+1]
-            suffix[i] = su
-            
-        for i in range(len(suffix)):
-            prefix[i] = prefix[i] * suffix[i]
-            
-        return prefix
+            num *= nums[i-1]
+            prefix[i] = num
+        prefix[0] = 1
+        
+        suffix = nums[:]
+        p = 1
+        for j in range(len(nums)-2, -1, -1):
+            p *= nums[j+1]
+            suffix[j] = p
+        suffix[-1] = 1
+        res = [1] * len(nums)
+        for i in range(len(nums)):
+            res[i] = prefix[i] * suffix[i]          
+        
+        return res
