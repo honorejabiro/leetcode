@@ -4,7 +4,6 @@
 #         self.val = val
 #         self.next = next
 
-
 class HeapNode:
     def __init__(self, node):
         self.node = node
@@ -16,23 +15,22 @@ class HeapNode:
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
 
-        min_heap = []
-        for head in lists:
-            if head:
-                heapq.heappush(min_heap, HeapNode(head))
+        heap = []
+        for l in lists:
+            if l:
+                heapq.heappush(heap, HeapNode(l))
 
-        dummy = ListNode(val=float("-inf"))
+        dummy = ListNode()
         curr = dummy
 
-        while min_heap:
-            smallest = heapq.heappop(min_heap)
-            node = smallest.node
-            curr.next = node
+        while heap:
+            smallest = heapq.heappop(heap)
+            curr.next = smallest.node
 
-            if node.next:
-                heapq.heappush(min_heap, HeapNode(node.next))
-
+            if smallest.node.next:
+                heapq.heappush(heap, HeapNode(smallest.node.next))
+            
             curr = curr.next
-
+        
         return dummy.next
-
+        
