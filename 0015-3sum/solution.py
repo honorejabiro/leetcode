@@ -1,18 +1,19 @@
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        #using set to remove duplicates
-        nums.sort()
         res = set()
+        nums.sort()
+
         for i in range(len(nums)):
+            target = -nums[i]
             l, r = i + 1, len(nums) - 1
             while l < r:
-                ans = nums[i] + nums[l] + nums[r]
-                if ans < 0:
-                    l += 1
-                elif ans > 0:
+                tot = nums[l] + nums[r]
+                if tot == target:
+                    res.add(tuple([nums[i], nums[l], nums[r]]))
                     r -= 1
-                else:
-                    res.add((nums[i], nums[l], nums[r]))
                     l += 1
+                elif tot > target:
                     r -= 1
-        return list(res)
+                elif tot < target:
+                    l += 1
+        return [list(i) for i in res]
