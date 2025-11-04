@@ -8,27 +8,30 @@ class Solution:
         """
         Do not return anything, modify head in-place instead.
         """
-        #We find the middle
+        # Find the middle node using slow and fast pointer
+        # Reverse the other part
+        # Combine the two nodes
         slow, fast = head, head
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
 
-        #we reverse the other part
-        prev, curr = None, slow
+        prev, curr = None, slow.next
+        slow.next = None
         while curr:
             tmp = curr.next
             curr.next = prev
             prev = curr
             curr = tmp
-        #we connect the lists
+
         first = head
         second = prev
-        while second.next:
-            tmp1 = first.next
-            tmp2 = second.next
+        while second:
+            tmp1, tmp2 = first.next, second.next
 
             first.next = second
             second.next = tmp1
             first = tmp1
             second = tmp2
+
+        
