@@ -4,21 +4,16 @@
 #         self.val = x
 #         self.next = None
 
-
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-
-        if not head:
-            return head
-
-        slow, fast = head, head
-
+        # Using slow and fast pointer
+        # Edge cae if head is None
+        if head is None:
+            return False
+        slow, fast = head, head.next
         while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
-
             if slow == fast:
                 return True
-
+            slow = slow.next
+            fast = fast.next.next
         return False
-
