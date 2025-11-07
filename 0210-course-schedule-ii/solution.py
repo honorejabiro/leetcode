@@ -1,34 +1,25 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         
-        in_degree = [0] * numCourses
-        adj = [[] for _ in range(numCourses)]
+        in_degree = {a: 0 for a in range(numCourses)}
+        neighbors = defaultdict(set)
 
-        for course, prereq in prerequisites:
-            in_degree[course] += 1
-            adj[prereq].append(course)
+        for u, v in prerequisites:
+            in_degree[u] += 1
+            neighbors[v].add(u)
 
-        print(in_degree)
-        print(adj)
-        
-        q = deque([course for course in range(numCourses) if in_degree[course] == 0])
-        scheduling = []
+        q = deque([x for x in in_degree if in_degree[x] == 0])
+        scheduled = []
 
         while q:
 
             curr = q.popleft()
-            scheduling.append(curr)
+            scheduled.append(curr)
 
-            for dest in adj[curr]:
-                in_degree[dest] -= 1
+            for dst in neighbors[curr]:
+                in_degree[dst] -= 1
 
-                if in_degree[dest] == 0:
-                    q.append(dest)
+                if in_degree[dst] == 0:
+                    q.append(dst)
 
-        return scheduling if len(scheduling) == numCourses else []
-
-
-
-
-
-
+        return scheduled if len(scheduled) == numCourses else []
