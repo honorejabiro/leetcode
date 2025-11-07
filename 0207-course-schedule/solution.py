@@ -1,28 +1,26 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        
-        in_degree = [0] * numCourses
-        adj = defaultdict(list)
 
-        for dest, src in prerequisites:
-            in_degree[dest] += 1
-            adj[src].append(dest)
-        
-        q = deque([course for course in range(numCourses) if in_degree[course] == 0])
-        scheduled = 0
+        in_degree = {a: 0 for a in range(numCourses)}
+        neighbors = defaultdict(set)
+
+        for u, v in prerequisites:
+            in_degree[u] += 1
+            neighbors[v].add(u)
+
+        q = deque([x for x in in_degree if in_degree[x] == 0])
+        scheduled = set()
 
         while q:
 
             curr = q.popleft()
-            scheduled += 1
+            scheduled.add(curr)
 
-            for course in adj[curr]:
-                in_degree[course] -= 1
+            for dst in neighbors[curr]:
+                in_degree[dst] -= 1
 
-                if in_degree[course] == 0:
-                    q.append(course)
-        
-        return scheduled == numCourses
+                if in_degree[dst] == 0:
+                    q.append(dst)
 
-
+        return len(scheduled) == len(in_degree)
 
