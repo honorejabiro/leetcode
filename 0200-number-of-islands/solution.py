@@ -1,42 +1,55 @@
-from collections import deque
+class DSU:
+    def __init__(self, grid):
+        self.parents = {}
+        self.sizes = {}
+        self.num_islands = 0
+
+        ROWS, COLS = len(grid), len(grid[0])
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if grid[r][c] == "1":
+                    self.parents[(r, c)] = (r, c)
+                    self.sizes[(r, c)] = 1
+                    self.num_islands += 1
+
+    def find(self, x):
+        if self.parents[x] != x:
+            self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+
+    def union(self, x, y):
+
+        parent_x = self.find(x)
+        parent_y = self.find(y)
+
+        if parent_x == parent_y:
+            return
+
+        if self.sizes[parent_x] > self.sizes[parent_y]:
+            self.parents[parent_y] = parent_x
+            self.sizes[parent_x] += self.sizes[parent_y]
+        else:
+            self.parents[parent_x] = parent_y
+            self.sizes[parent_y] += self.sizes[parent_x]
+
+        self.num_islands -= 1
+
+
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        # base case
-        if len(grid) == 0:
-            return 0
 
-        rows, columns = len(grid), len(grid[0])
-        seen = set()
-        directions = [[1,0],[0,1],[-1,0],[0,-1]]
+        dsu = DSU(grid)
+        ROWS, COLS = len(grid), len(grid[0])
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-        answer = 0
+        for r in range(ROWS):
+            for c in range(COLS):
+                if grid[r][c] == "1":
+                    for dr, dc in directions:
+                        nr, nc = r + dr, c + dc
+                        if 0 <= nr < ROWS and 0 <= nc < COLS and grid[nr][nc] == "1":
+                            dsu.union((r, c), (nr, nc))
 
-        def bfs(row, column):
-            seen.add((row,column))
-            queue = deque()
-            queue.append((row,column))
-            
-            while queue:
-                r, c = queue.popleft()
+        return dsu.num_islands
 
-                for x, y in directions:
-                    current_row = r + x
-                    current_column = c + y
-
-                    if ( (current_row in range(rows)) and
-                         (current_column in range(columns)) and
-                         ((current_row,current_column) not in seen) and
-                         ( grid[current_row][current_column] == "1")
-                        ):
-                        seen.add((current_row,current_column))
-                        queue.append((current_row,current_column))
-
-
-        for row in range(rows):
-            for column in range(columns):
-
-                if (((row,column) not in seen) and (grid[row][column] == "1")):
-                    bfs(row,column)
-                    answer += 1
-
-        return answer
