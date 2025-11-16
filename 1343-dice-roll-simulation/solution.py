@@ -1,25 +1,22 @@
 class Solution:
     def dieSimulator(self, n: int, rollMax: List[int]) -> int:
+        
+        M = (10 ** 9) + 7
 
-        @lru_cache(maxsize=None)
-        def f(face, consecutive, length):
+        @cache
+        def backtrack(rolls, face, length):
 
-            if length == n:
+            if rolls == n:
                 return 1
 
             total = 0
-            for nxt in range(1, 7):
-                if nxt == face:
-                    if consecutive < rollMax[face - 1]:
-                        total += f(face, consecutive + 1, length + 1)
-                else:
-                    total += f(nxt, 1, length + 1)
-
+            for next_face in range(6):
+                if next_face != face:
+                    total += backtrack(rolls + 1, next_face, 0)
+                elif length + 1 < rollMax[face]:
+                    total += backtrack(rolls + 1, face, length + 1)
+            
             return total
-
-        count = 0
-        for i in range(1, 7):
-            count += f(i, 1, 1)
-
-        return count % (10**9 + 7)
+        
+        return backtrack(0, -1, 0) % M
 
