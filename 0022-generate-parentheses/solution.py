@@ -1,19 +1,24 @@
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        result = []
-        def backtrack(path, starting_index):
-            if starting_index / 2 == n:
-                result.append("".join(path.copy()))
+        
+        answer = []
+
+        def f(length, opening, closing, path):
+
+            if length == 2 * n:
+                answer.append("".join(path))
                 return
-
-            if path.count("(") < n:
+            
+            if opening < n:
                 path.append("(")
-                backtrack(path, starting_index+1)
+                f(length + 1, opening + 1, closing, path)
                 path.pop()
-
-            if path.count(")") < path.count("("):
+            
+            if opening > closing:
                 path.append(")")
-                backtrack(path, starting_index+1)
+                f(length + 1, opening, closing + 1, path)
                 path.pop()
-        backtrack([], 0)
-        return result
+        
+        f(0, 0, 0, [])
+        return answer
+
