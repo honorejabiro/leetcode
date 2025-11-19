@@ -1,8 +1,9 @@
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
         
-        a = 0
-        for x in nums:
-            a ^= x
-        return a
+        # a = 0
+        # for x in nums:
+        #     a ^= x
+        # return a
+        return 2 * sum(set(nums)) - sum(nums)
         
