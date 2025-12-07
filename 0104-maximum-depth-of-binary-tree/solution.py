@@ -9,17 +9,17 @@ class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if root is None:
             return 0
+        p = root
         q = deque([root])
-        res = 0
+        result = 0
+
         while q:
             l = len(q)
+            result += 1
             for i in range(l):
                 n = q.popleft()
                 if n.right:
                     q.append(n.right)
                 if n.left:
                     q.append(n.left)
-
-            res += 1
-
-        return res
+        return result
