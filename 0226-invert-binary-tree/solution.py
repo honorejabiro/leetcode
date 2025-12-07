@@ -6,24 +6,22 @@
 #         self.right = right
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        
-        if not root:
-            return 
+        # Edge case if the root is empty return None
+        # Create a dfs function
+        # Store both left and right children
+        # Assign the left to the recursively called right child
+        # Assign the right to the recursively called left child
+        # Return root
+        def dfs(root):
+            if root is None:
+                return root
 
-        stack = [root]
+            right = root.right
+            root.right = dfs(root.left)
+            root.left = dfs(right)
 
-        while stack:
+            return root
 
-            curr = stack.pop()
-            curr.left, curr.right = curr.right, curr.left
+        return dfs(root)
 
-            if curr.left:
-                stack.append(curr.left)
             
-            if curr.right:
-                stack.append(curr.right)
-           
-        return root
-
-           
-       
