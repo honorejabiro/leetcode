@@ -5,47 +5,29 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def similar(self, x, y):
-        same = True
-
-        def equality(x, y):
-            nonlocal same
-            if not x and not y:
-                return
-
-            if not x or not y:
-                same = False
-                return
-
-            print(x.val, y.val)
-            if x.val != y.val:
-                print(x.val, y.val, same)
-                same = False
-                print(x.val, y.val, same)
-                return
-
-            equality(x.left, y.left)
-            equality(x.right, y.right)
-
-        equality(x, y)
-        return same
-
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        def isSame(r, s):
+            if not r and not s:
+                return True
+            if not r and s:
+                return False
+            if r and not s:
+                return False
+            if r.val != s.val:
+                return False
+            return isSame(r.left, s.left) and isSame(r.right, s.right)
 
-        sub = False
+        def isSub(root, subRoot):
+            if root is None and subRoot is None:
+                return True
 
-        def dfs(node):
+            if root is None:
+                return False
 
-            nonlocal sub
-            if not node:
-                return
+            if root.val == subRoot.val:
+                if isSame(root, subRoot):
+                    return True
 
-            if self.similar(node, subRoot):
-                sub = True
+            return isSub(root.left,subRoot) or isSub(root.right, subRoot)
 
-            dfs(node.left)
-            dfs(node.right)
-
-        dfs(root)
-        return sub
-
+        return isSub(root, subRoot)
