@@ -6,20 +6,23 @@
 #         self.right = right
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        # Iterative 
+        # Create a stack
+        # While stack or root
+        # Go to the furthest left
+        # If root is None pop from the stack and add to the result
+        # Update the pointer to right
+        stack = []
+        pointer = root
+        res = []
+
+        while stack or pointer:
+            while pointer:
+                stack.append(pointer)
+                pointer = pointer.left
+
+            node = stack.pop()
+            res.append(node.val)
+            pointer = node.right
         
-        traversal = []
-
-        def dfs(node):
-
-            if not node:
-                return 
-
-            dfs(node.left)
-            traversal.append(node.val)
-            dfs(node.right)
-        
-        dfs(root)
-        return traversal[k - 1]
-       
-
-
+        return res[k-1]
