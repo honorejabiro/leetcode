@@ -4,26 +4,23 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from collections import deque
 class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
-
-        if not root:
+        if root is None:
             return []
-
-        mirror_view = []
-
-        def dfs(node, level):
-
-            if not node:
-                return
-
-            if level == len(mirror_view):
-                mirror_view.append(node.val)
-
-            dfs(node.right, level + 1)
-            dfs(node.left, level + 1)
-
-        dfs(root, 0)
-
-        return mirror_view
-
+        q = deque([root])
+        res = []
+        while q:
+            l = len(q)
+            for i in range(l):
+                if i == 0:
+                    p = q.popleft()
+                    res.append(p.val)
+                else:
+                    p = q.popleft()
+                if p.right:
+                    q.append(p.right)
+                if p.left:
+                    q.append(p.left)
+        return res
