@@ -1,14 +1,27 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
+        # Base case if the index is equal to length of nums add the path and return
+        # Define the result list 
         res = []
-
-        def dfs(path, starting_index):
+        length = len(nums)
+        # Define the dfs function
+        def dfs(index, path):
+            # Base case if the index is equal to length of nums add the path and return
+            if index == length:
+                res.append(path.copy())
+                return
+            # Add the path to the result list
             res.append(path.copy())
-
-            for i in range(starting_index, len(nums)):
+            # For loop starting from the current index
+            for i in range(index, length):
+                # Add the number to the path
                 path.append(nums[i])
-                dfs(path, i+1)
+                # Recursively call the function
+                dfs(i+1, path)
+                # Pop from the list after backtracking
                 path.pop()
-
-        dfs([], 0)
+        # Call the dfs function
+        dfs(0, [])
+        # Return the result list
         return res
+
