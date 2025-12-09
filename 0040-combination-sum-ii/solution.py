@@ -1,39 +1,32 @@
-class Solution(object):
-    def combinationSum2(self, candidates, target):
-        """
-        :type candidates: List[int]
-        :type target: int
-        :rtype: List[List[int]]
-        """
-        # Sort the candidates list
-        # Edge case if the index exceeds or reaches the end of the list return 
-        # Identify the result list 
-        # If the sum of the current has been reached add to the result
-        # Create a prev number to skip any repeating values and prevent identical siblings
-        # Create a for loop to create our tree Staring from current position
-        # If the the current value equals previous continue
-        # Recursively call the function
-        # After backtracking pop from curr
-        # Store the prev as current value
-
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        # Sort the list of candidates
+        # Define the result list
+        # Define the length variable
+        # Define the function
+        # Base case if the index equals the length or sum greater than target of candidates return 
+        # If target equals the target add to the result list
+        # For loop starting from current index
+        # If the number is the same as previous number skip
+        # Recurse and after backtracking pop from the path
         candidates.sort()
         result = []
-        def backtrack(i, curr, total):
-            if total == target:
-                result.append(curr[:])
-                return 
+        length = len(candidates)
 
-            if total > target or i >= len(candidates):
+        def dfs(index, path, tot):
+            if tot == target:
+                result.append(path[:])
+                return
+            if index == length or tot > target:
                 return
 
-            prev = -1
-            for i in range(i, len(candidates)):
-                if prev == candidates[i]:
+            for i in range(index, length):
+                if i > index and candidates[i] == candidates[i-1]:
                     continue
-                curr.append(candidates[i])
-                backtrack(i+1, curr, total + candidates[i])
-                curr.pop()
-                prev = candidates[i]
+                
+                path.append(candidates[i])
+                dfs(i+1, path, tot+candidates[i])
+                path.pop()
 
-        backtrack(0, [], 0)
+        dfs(0, [], 0)
         return result
