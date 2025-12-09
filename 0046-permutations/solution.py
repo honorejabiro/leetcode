@@ -1,21 +1,30 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        # Create a res variable
-        res = []
-        # Implement a dfs function
+        # Identify the result list
+        # Base case if the length of the path equals the length of nums add the path to the result list
+        # Define the dfs function
+        # For loop of the nums
+        # If number in the path skip it
+        # Add the number to the path and recursively call the function
+        # Pop from the path
+
+        result = []
+        length = len(nums)
+        visited = [False] * len(nums)
+
         def dfs(path):
-            # Edge case if the length of the path is the same as the length of the nums add to result
-            if len(path) == len(nums):
-                res.append(path.copy())
-            # Create a for loop for all nums
-            for i in range(len(nums)):
-                # If current number is in path skip it
-                if nums[i] in path:
+            if len(path) == length:
+                result.append(path[:])
+                return 
+
+            for i in range(length):
+                if visited[i]:
                     continue
-                # After backtracking pop from the path
+                visited[i] = True
                 path.append(nums[i])
                 dfs(path)
                 path.pop()
+                visited[i] = False
 
         dfs([])
-        return res
+        return result
