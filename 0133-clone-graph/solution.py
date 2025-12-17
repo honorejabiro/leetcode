@@ -6,33 +6,23 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 """
 
-from typing import Optional
-
-
+from collections import deque
 class Solution:
-    def cloneGraph(self, node: Optional["Node"]) -> Optional["Node"]:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        if not node:
+            return node
+        clones = {node: Node(node.val)}
+        q = deque([node])
 
-        if node is None:
-            return
+        while q:
+            length = len(q)
+            for i in range(length):
+                n = q.popleft()
+                for nei in n.neighbors:
+                    if nei not in clones:
+                        clones[nei] = Node(nei.val)
+                        q.append(nei)
 
-        hashmap = defaultdict(list)
-        visited = set()
+                    clones[n].neighbors.append(clones[nei])
 
-        def dfs(node):
-
-            clone_node = Node(node.val)
-            hashmap[node] = clone_node
-            visited.add(node)
-
-            for neighbor in node.neighbors:
-                if neighbor not in visited:
-                    clone_neighbor = dfs(neighbor)
-                    clone_node.neighbors.append(clone_neighbor)
-                else:
-                    clone_node.neighbors.append(hashmap[neighbor])
-
-            return clone_node
-
-        dfs(node)
-        return hashmap[node]
-
+        return clones[node]
