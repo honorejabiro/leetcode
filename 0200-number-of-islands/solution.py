@@ -1,55 +1,44 @@
-class DSU:
-    def __init__(self, grid):
-        self.parents = {}
-        self.sizes = {}
-        self.num_islands = 0
-
-        ROWS, COLS = len(grid), len(grid[0])
-
-        for r in range(ROWS):
-            for c in range(COLS):
-                if grid[r][c] == "1":
-                    self.parents[(r, c)] = (r, c)
-                    self.sizes[(r, c)] = 1
-                    self.num_islands += 1
-
-    def find(self, x):
-        if self.parents[x] != x:
-            self.parents[x] = self.find(self.parents[x])
-        return self.parents[x]
-
-    def union(self, x, y):
-
-        parent_x = self.find(x)
-        parent_y = self.find(y)
-
-        if parent_x == parent_y:
-            return
-
-        if self.sizes[parent_x] > self.sizes[parent_y]:
-            self.parents[parent_y] = parent_x
-            self.sizes[parent_x] += self.sizes[parent_y]
-        else:
-            self.parents[parent_x] = parent_y
-            self.sizes[parent_y] += self.sizes[parent_x]
-
-        self.num_islands -= 1
-
-
+from collections import deque
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        # Create a visted set
+        # Define the get neighbors function return valid moves to make
+        # Define the number of islands variable
+        # Iterate over the cells in my matrix
+        # If the cell is not in visitesd array
+        # Operate a dfs function
+        # Update the number of islands
+        number_of_islands = 0
+        visited = set()
+        def get_neighbors(cell, grid):
+            r, c = cell[0], cell[1]
+            dr = [1, 0 , -1, 0]
+            dc = [0, 1, 0, -1]
+            moves = []
 
-        dsu = DSU(grid)
-        ROWS, COLS = len(grid), len(grid[0])
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            for i in range(4):
+                nr, nc = dr[i]+r, dc[i]+c
+                if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] == "1":
+                    moves.append((nr, nc))
 
-        for r in range(ROWS):
-            for c in range(COLS):
-                if grid[r][c] == "1":
-                    for dr, dc in directions:
-                        nr, nc = r + dr, c + dc
-                        if 0 <= nr < ROWS and 0 <= nc < COLS and grid[nr][nc] == "1":
-                            dsu.union((r, c), (nr, nc))
+            return moves
 
-        return dsu.num_islands
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                if (r, c) not in visited and grid[r][c] == "1":
+                    q = deque([(r, c)])
+                    visited.add((r,c))
+
+                    while q:
+                        length = len(q)
+                        for i in range(length):
+                            node = q.popleft()
+                            for move in get_neighbors((node[0], node[1]), grid):
+                                if move not in visited:
+                                    visited.add(move)
+                                    q.append(move)
+                    number_of_islands += 1
+
+
+        return number_of_islands
 
