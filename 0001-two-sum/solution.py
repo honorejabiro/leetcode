@@ -1,17 +1,12 @@
-from collections import defaultdict
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
-        difference = defaultdict()
-        answer = []
+        hashmap = {}
 
-        i = 0
-        while i < len(nums):
-            diff = target - nums[i]
-            if (nums[i]) in difference:
-                answer.append(difference[nums[i]])
-                answer.append(i)
-                return answer
-            difference[diff] = i
-            i += 1
+        for i, num in enumerate(nums):
+            diff = target - num
+            if diff in hashmap:
+                return [hashmap[diff], i]
 
+            hashmap[num] = i
 
+        
