@@ -2,20 +2,25 @@ from collections import deque
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         # Create a queue
-        # Create a res variable
-        # Iterate over the string
-        # If element is in the queue
-        # Popleft until the element is removed
-        # Update the result answer
-
-        res = 0
+        # Create a result variable
+        # Iterate the string
+        # Create a set
+        # Update the result variable using the length of the queue
+        # If the string is in the set
+        # We remove the end of the queue and remove from the set
+        # Add to the queue
         queue = deque([])
+        res = 0
+        duplicates = set()
 
-        for i in s:
-            while i in queue:
-                queue.popleft()
+        for i in range(len(s)):
+            while s[i] in duplicates:
+                n = queue.popleft()
+                duplicates.remove(n)
+            
+            queue.append(s[i])
+            duplicates.add(s[i])
+            res = max(len(queue), res)
 
-            queue.append(i)
-            res = max(res, len(queue))
-        
         return res
+
