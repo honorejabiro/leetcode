@@ -1,33 +1,28 @@
+from collections import Counter
 class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
-        # Base case if the closing is greater than opening, if the opeing or clsing is greater than n
-        # Define the result list
-        # Define the dfs function
-        # If the the length of the divided by 2 is equal to n add the path copy to the result
-        # Add the opening bracket to the path
-        # Recurse the function
-        # After backtracking
-        # Pop from the list
-        # Add the closing bracket to the path
-        # Call the function 
-        # Return the result list
+        # Base case is if the length of 3 is reached add the path
+        # If opening is greater than n return or closing or closing
+        # If closing is greater than opeing we return
         result = []
-
-        def dfs(path, opening, closing):
-            if closing > opening or closing > n or opening > n:
+        def dfs(path):
+            counter = Counter(path)
+            opening = counter['('] if '(' in counter else 0
+            closing = counter[')'] if ')' in counter else 0
+            if opening > n or closing > n or closing > opening:
+                return
+            
+            if len(path) == n*2:
+                result.append("".join(path.copy()))
                 return
 
-            if len(path)/2 == n:
-                result.append(''.join(path.copy()))
-                return
-
-            path.append("(")
-            dfs(path, opening+1, closing)
+            path.append('(')
+            dfs(path)
             path.pop()
-            path.append(")")
-            dfs(path, opening, closing+1)
+            path.append(')')
+            dfs(path)
             path.pop()
+        
+        dfs([])
 
-        dfs([], 0, 0)
         return result
-
