@@ -1,16 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        # Keep a current minimum
-        # Iterate the list
-        # If the current index ha a number greater find the profit and update the profit by max
-        # Update the minimum buying price
-        curr_min = prices[0]
-        profit = 0
-        for i in prices[1:]:
-            if i > curr_min:
-                p = i - curr_min
-                profit = max(profit, p)
-            if i < curr_min:
-                curr_min = i
+        pointer = prices[0]
+        result = float('-inf')
+        r = 1
 
-        return profit
+        while r < len(prices):
+            result = max(result, prices[r] - pointer)
+            if pointer > prices[r]:
+                pointer = prices[r]
+
+            r += 1
+
+        return result if result > 0 else 0
