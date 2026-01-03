@@ -1,9 +1,15 @@
 class Solution:
     def maximumProduct(self, nums: List[int]) -> int:
-        x = sorted(nums)
-        # Case 1: Product of the three largest numbers
-        option1 = x[-1] * x[-2] * x[-3]
-        # Case 2: Product of the two smallest numbers (most negative) and the largest number
-        option2 = x[0] * x[1] * x[-1]
-        # Return the maximum of these two cases
-        return max(option1, option2)
+        # Sort the numbers
+        # Get the product of the last three numbers 
+        # Return the product 
+        nums.sort()
+        product = None
+        if len(nums) > 3:
+            if (nums[0] * nums[1] * nums[-1]) > (nums[-3] *nums[-2] * nums[-1]):
+                product = nums[0] * nums[1] * nums[-1]
+            else:
+                product = nums[-1] * nums[-2] * nums[-3]
+        else:
+            product = nums[-1] * nums[-2] * nums[-3]
+        return product
