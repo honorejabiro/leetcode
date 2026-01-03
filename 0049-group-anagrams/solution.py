@@ -1,19 +1,21 @@
+from collections import defaultdict
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        from collections import defaultdict
-        hashmap = defaultdict(list)
+        # Result array
+        # Create a hashmap of the key
+        # Itearte the arrrsy and create the key
+        # If key in hashmap add teh word
+        # Return the list of the anagrams
         res = []
-
-        for i in strs:
+        hashmap = defaultdict(list)
+        for word in strs:
             key = [0] * 26
-            for j in i:
-                n = ord(j) - ord("a")
-                key[n] += 1
-            
-            key = tuple(key)
-            hashmap[key].append(i)
+            for i in word:
+                key[ord(i) - ord('a')] += 1
+            hashmap[tuple(key)].append(word)
 
-        for i in hashmap.values():
-            res.append(i)
+
+        for j in hashmap.values():
+            res.append(j)
 
         return res
